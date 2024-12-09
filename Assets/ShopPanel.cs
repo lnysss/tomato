@@ -56,7 +56,7 @@ public class ShopPanel : MonoBehaviour
             "出发 (第" + (GameManager.Instance.currentWave) + "波)";
         _startButton.onClick.AddListener(() =>
         {
-            SceneManager.LoadScene("03-GamePlay");
+            SceneManager.LoadScene(2);
         });
 
         _moneyText.text = GameManager.Instance.money.ToString();

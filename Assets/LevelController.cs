@@ -189,7 +189,7 @@ public class LevelController : MonoBehaviour
     private void NextWave()
     {
         GameManager.Instance.money += GameManager.Instance.propData.harvest;
-        SceneManager.LoadScene("04-Shop");
+        SceneManager.LoadScene(3);
         GameManager.Instance.currentWave += 1;
 
 
