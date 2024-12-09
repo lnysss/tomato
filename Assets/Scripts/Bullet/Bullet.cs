@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
     public Vector2 dir = Vector2.zero;
     public string tagName;
     public bool isCritical = false;
+    public bool isPool = false;
+    public string type;
 
     public void Awake()
     {
@@ -33,7 +35,7 @@ public class Bullet : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= deadTime)
         {
-            Destroy(gameObject);
+            DestroyBullet(gameObject);
         }
 
 
@@ -78,9 +80,47 @@ public class Bullet : MonoBehaviour
 
 
             }
+            
+            
+            DestroyBullet(gameObject);
 
-            Destroy(gameObject);
+
 
         }
+    }
+
+    public void DestroyBullet(GameObject bulletGo)
+    {
+        Bullet bullet = bulletGo.GetComponent<Bullet>();
+        
+        
+        if (bullet.isPool)
+        {
+            
+            //bulletGo.transform.SetParent(GameManager.Instance.transform);
+            bulletGo.SetActive(false);
+            /*switch (bullet.type)
+            {
+                case "medical":
+                    GameManager.Instance.medicalBulletPool.Push(bullet.gameObject);
+                    break;
+                case "pistol":
+                    GameManager.Instance.pistolBulletPool.Push(bullet.gameObject);
+                    break;
+                case "arrow":
+                    GameManager.Instance.arrowBulletPool.Push(bullet.gameObject);
+                    break;
+                default:
+
+                    break;
+            }*/
+        }
+        else
+        {
+            Destroy(bulletGo);
+        }
+        
+
+
     }
 }

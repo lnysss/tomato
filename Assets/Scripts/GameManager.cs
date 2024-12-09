@@ -1,13 +1,24 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using NUnit.Framework.Constraints;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.UIElements;
 using Random = System.Random;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    public int poolSize = 5;
+    
+    public List<GameObject> arrowBulletPool = new List<GameObject>();
+    public List<GameObject> pistolBulletPool = new List<GameObject>();
+    public List<GameObject> medicalBulletPool = new List<GameObject>();
+
+    
     public RoleData currentRole;
     public List<WeaponData> currentWeapons = new List<WeaponData>();
 
@@ -45,7 +56,7 @@ public class GameManager : MonoBehaviour
 
 
     public float hp = 15f;
-    public int money = 30;
+    public int money = 200;
     public float exp = 0;
 
     public SpriteAtlas propsAtlas;
@@ -105,6 +116,25 @@ public class GameManager : MonoBehaviour
         medicalBullet_prefab = Resources.Load<GameObject>("Prefabs/MedicalBullet");
 
         propsAtlas = Resources.Load<SpriteAtlas>("Image/其他/Props");
+
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject arrowBullet = Instantiate(arrowBullet_prefab);
+            GameObject medicalBullet = Instantiate(medicalBullet_prefab);
+            arrowBullet.transform.SetParent(transform);
+            medicalBullet.transform.SetParent(transform);
+            medicalBullet.SetActive(false);
+            arrowBullet.SetActive(false);
+            arrowBulletPool.Add(arrowBullet);
+            medicalBulletPool.Add(medicalBullet);
+
+
+            GameObject pistolBullet = Instantiate(pistolBullet_prefab);
+            pistolBullet.transform.SetParent(transform);
+            pistolBullet.SetActive(false);
+            pistolBulletPool.Add(pistolBullet);
+            
+        }
     }
 
 
@@ -116,6 +146,64 @@ public class GameManager : MonoBehaviour
     {
     }
 
+    public GameObject GetBullet(string bulletType)
+    {
+        GameObject bullet = null;
+        switch (bulletType)
+        {
+            case "medical":
+                foreach(GameObject go in medicalBulletPool)
+                {
+                    if (!go.activeInHierarchy)
+                    {
+                        go.SetActive(true);
+                        return go;
+                    }
+                    
+                }
+                    
+                return null;
+                break;
+            case "pistol":
+                foreach (GameObject go in pistolBulletPool)
+                {
+                    if (!go.activeInHierarchy)
+                    {
+                        go.SetActive(true);
+                        return go;
+                    }
+
+                }
+
+                return null;
+                break;
+            case "arrow":
+                foreach (GameObject go in arrowBulletPool)
+                {
+                    if (!go.activeInHierarchy)
+                    {
+                        go.SetActive(true);
+                        return go;
+                    }
+
+                }
+
+                return null;
+                /*if (arrowBulletPool.Count > 0)
+                {
+                    bullet = medicalBulletPool.Peek();
+                    medicalBulletPool.Pop();
+                    bullet.SetActive(true);
+                }
+
+                return bullet;*/
+                break;
+            default:
+                return bullet;
+                break;
+
+        }
+    }
     public object RandomOne<T>(List<T> list)
     {
         if (list == null || list.Count == 0)
@@ -171,7 +259,7 @@ public class GameManager : MonoBehaviour
 
 
         hp = propData.maxHp;
-        money = 30;
+        money = 200;
         exp = 0;
 
     }
