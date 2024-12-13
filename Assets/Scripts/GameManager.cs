@@ -13,12 +13,16 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public int poolSize = 5;
-    
-    public List<GameObject> arrowBulletPool = new List<GameObject>();
-    public List<GameObject> pistolBulletPool = new List<GameObject>();
-    public List<GameObject> medicalBulletPool = new List<GameObject>();
 
-    
+    /*public List<GameObject> arrowBulletPool = new List<GameObject>();
+    public List<GameObject> pistolBulletPool = new List<GameObject>();
+    public List<GameObject> medicalBulletPool = new List<GameObject>();*/
+
+    public Stack<GameObject> arrowBulletPool = new Stack<GameObject>();
+    public Stack<GameObject> pistolBulletPool = new Stack<GameObject>();
+    public Stack<GameObject> medicalBulletPool = new Stack<GameObject>();
+
+
     public RoleData currentRole;
     public List<WeaponData> currentWeapons = new List<WeaponData>();
 
@@ -125,15 +129,17 @@ public class GameManager : MonoBehaviour
             medicalBullet.transform.SetParent(transform);
             medicalBullet.SetActive(false);
             arrowBullet.SetActive(false);
-            arrowBulletPool.Add(arrowBullet);
-            medicalBulletPool.Add(medicalBullet);
-
+            /*arrowBulletPool.Add(arrowBullet);
+            medicalBulletPool.Add(medicalBullet);*/
+            arrowBulletPool.Push(arrowBullet);
+            medicalBulletPool.Push(medicalBullet);
 
             GameObject pistolBullet = Instantiate(pistolBullet_prefab);
             pistolBullet.transform.SetParent(transform);
             pistolBullet.SetActive(false);
-            pistolBulletPool.Add(pistolBullet);
-            
+            //pistolBulletPool.Add(pistolBullet);
+            pistolBulletPool.Push(pistolBullet);
+
         }
     }
 
@@ -152,55 +158,50 @@ public class GameManager : MonoBehaviour
         switch (bulletType)
         {
             case "medical":
-                foreach(GameObject go in medicalBulletPool)
-                {
-                    if (!go.activeInHierarchy)
-                    {
-                        go.SetActive(true);
-                        return go;
-                    }
-                    
-                }
-                    
-                return null;
-                break;
-            case "pistol":
-                foreach (GameObject go in pistolBulletPool)
-                {
-                    if (!go.activeInHierarchy)
-                    {
-                        go.SetActive(true);
-                        return go;
-                    }
-
-                }
-
-                return null;
-                break;
-            case "arrow":
-                foreach (GameObject go in arrowBulletPool)
-                {
-                    if (!go.activeInHierarchy)
-                    {
-                        go.SetActive(true);
-                        return go;
-                    }
-
-                }
-
-                return null;
-                /*if (arrowBulletPool.Count > 0)
+                if (medicalBulletPool.Count > 0)
                 {
                     bullet = medicalBulletPool.Peek();
                     medicalBulletPool.Pop();
                     bullet.SetActive(true);
                 }
 
-                return bullet;*/
-                break;
+                return bullet;
+                
+            case "pistol":
+                if (pistolBulletPool.Count > 0)
+                {
+                    bullet = pistolBulletPool.Peek();
+                    pistolBulletPool.Pop();
+                    bullet.SetActive(true);
+                }
+
+                return bullet;
+                
+            case "arrow":
+                /*foreach (GameObject go in arrowBulletPool)
+                {
+                    if (!go.activeInHierarchy)
+                    {
+                        go.SetActive(true);
+                        return go;
+                    }
+
+                }
+
+                return null;*/
+
+                if (arrowBulletPool.Count > 0)
+                {
+                    bullet = arrowBulletPool.Peek();
+                    arrowBulletPool.Pop();
+                    bullet.SetActive(true);
+                }
+
+                return bullet;
+                
             default:
                 return bullet;
-                break;
+                
 
         }
     }

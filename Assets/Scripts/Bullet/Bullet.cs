@@ -99,7 +99,7 @@ public class Bullet : MonoBehaviour
             
             //bulletGo.transform.SetParent(GameManager.Instance.transform);
             bulletGo.SetActive(false);
-            /*switch (bullet.type)
+            switch (bullet.type)
             {
                 case "medical":
                     GameManager.Instance.medicalBulletPool.Push(bullet.gameObject);
@@ -113,7 +113,7 @@ public class Bullet : MonoBehaviour
                 default:
 
                     break;
-            }*/
+            }
         }
         else
         {

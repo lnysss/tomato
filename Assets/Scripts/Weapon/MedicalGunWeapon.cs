@@ -31,7 +31,7 @@ public class MedicalGunWeapon : WeaponLong
         }
         else
         {
-            bulletGo.transform.SetParent(transform, true);
+            //bulletGo.transform.SetParent(transform, true);
             bulletGo.transform.position = transform.position;
             bulletGo.transform.rotation = Quaternion.identity;
             bullet = bulletGo.GetComponent<Bullet>();
